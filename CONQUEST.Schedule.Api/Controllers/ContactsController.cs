@@ -25,7 +25,7 @@ namespace CONQUEST.Schedule.Api.Controllers
             this._contactBusiness = contactBusiness;
             this._logger = logger;
         }
-        
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -34,23 +34,23 @@ namespace CONQUEST.Schedule.Api.Controllers
                 return Ok(this._contactBusiness.Get());
             }
             catch (Exception ex)
-            {   
+            {
                 string error = "Não foi possível realizar a busca de contatos";
                 this._logger.LogError(ex, error);
                 return BadRequest(new ErrorItem(1, error));
             }
         }
-        
-        [HttpGet("{id}")]
-        public IActionResult GetById(string id)
+
+        [HttpGet("{Code}")]
+        public IActionResult GetById(string Code)
         {
             try
             {
-                return Ok(this._contactBusiness.GetById(id));
+                return Ok(this._contactBusiness.GetById(Code));
             }
             catch (Exception ex)
             {
-                string error = $"Não foi possível realizar a busca do contato: {id}";
+                string error = $"Não foi possível realizar a busca do contato: {Code}";
                 this._logger.LogError(ex, error);
                 return BadRequest(new ErrorItem(2, error));
             }
@@ -83,11 +83,12 @@ namespace CONQUEST.Schedule.Api.Controllers
         }
 
         // PUT: api/Contacts/5
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]Contact contact)
+        [HttpPut("{Code}")]
+        public IActionResult Put(string Code, [FromBody]Contact contact)
         {
             try
             {
+                contact.Code = Code;
                 var resul = this._contactBusiness.Update(contact);
                 if (resul)
                 {
@@ -95,7 +96,7 @@ namespace CONQUEST.Schedule.Api.Controllers
                 }
                 else
                 {
-                    _logger.LogDebug("Não foi possível inserir");
+                    _logger.LogDebug("Não foi possível atualizar contato : " + Code);
                     return new BadRequestResult();
                 }
 
@@ -109,20 +110,29 @@ namespace CONQUEST.Schedule.Api.Controllers
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{Code}")]
+        public IActionResult Delete(string Code)
         {
-
             try
             {
-                return null;
+                _logger.LogDebug("Exclusão do contato: " + Code);
+                var ok = this._contactBusiness.Delete(Code);
+                if (ok)
+                {
+                    return new NoContentResult();
+                }
+                else
+                {
+                    _logger.LogDebug("Contato não encontrado");
+                    return new NotFoundResult();
+                }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                string error = $"Não foi possível inserir";
-                this._logger.LogError(ex, error);
-                return BadRequest(new ErrorItem(2, error));
+                _logger.LogError(exception, "Erro ao excluir contato");
+                return new BadRequestResult();
             }
         }
+
     }
 }

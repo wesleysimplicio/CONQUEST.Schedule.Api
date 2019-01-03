@@ -11,6 +11,7 @@ namespace CONQUEST.Schedule.Api.Domain.Models
         [BsonIgnoreIfDefault]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public string Telephone { get; set; }
         public List<Phone> OthersTelephones { get; set; }

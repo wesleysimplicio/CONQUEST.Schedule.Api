@@ -25,12 +25,13 @@ namespace CONQUEST.Schedule.Api.Domain.Repositories
 
         public List<Contact> Get()
         {
-            return null;
+            var retorno =  this._mongoClient.FindAll<Contact>(collection);
+            return retorno;
         }
 
-        public Contact GetById(string Id)
+        public Contact GetById(string Code)
         {
-            return null;
+            return this._mongoClient.FindOne<Contact>(collection, (x => x.Code == Code));
         }
 
         public void Insert(Contact contact)
@@ -40,7 +41,12 @@ namespace CONQUEST.Schedule.Api.Domain.Repositories
 
         public long Update(Contact contact)
         {
-            return this._mongoClient.Replace<Contact>(collection, (collection => contact.Id == contact.Id), contact);
+            return this._mongoClient.Replace<Contact>(collection, (collection => contact.Code == contact.Code), contact);
+        }
+
+        public long Delete(string Code)
+        {
+            return this._mongoClient.Delete<Contact>(collection, (collection => collection.Code == Code));
         }
 
         public void Dispose()

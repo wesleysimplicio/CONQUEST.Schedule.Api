@@ -7,8 +7,9 @@ namespace CONQUEST.Schedule.Api.Domain.Interfaces
     public interface IContactBusiness : IDisposable
     {
         List<Contact> Get();
-        Contact GetById(string Id);
+        Contact GetById(string Code);
         bool Insert(Contact contact);
         bool Update(Contact contact);
+        bool Delete(string Code);
     }
 }

@@ -20,9 +20,9 @@ namespace CONQUEST.Schedule.Api.Domain.Business
             return this._contactRepository.Get();
         }
 
-        public Contact GetById(string Id)
+        public Contact GetById(string Code)
         {
-            return this._contactRepository.GetById(Id);
+            return this._contactRepository.GetById(Code);
         }
 
         public bool Insert(Contact contact)
@@ -33,7 +33,29 @@ namespace CONQUEST.Schedule.Api.Domain.Business
 
         public bool Update(Contact contact)
         {
+
+            if (string.IsNullOrWhiteSpace(contact.Name)
+                || string.IsNullOrWhiteSpace(contact.Email)
+                || string.IsNullOrWhiteSpace(contact.Telephone))
+            {
+                return false;
+            }
+
             return this._contactRepository.Update(contact) > 0;
+        }
+
+        public bool Delete(string Code)
+        {
+            if (string.IsNullOrWhiteSpace(Code))
+                return false;
+
+            var dbUser = this._contactRepository.GetById(Code);
+            if (dbUser == null)
+            {
+                throw new Exception("Este contato não existe");
+            }
+            
+            return this._contactRepository.Delete(Code) > 0;
         }
 
         public void Dispose()
