@@ -8,5 +8,7 @@ namespace CONQUEST.Schedule.Api.Domain.Interfaces
     {
         List<Contact> Get();
         Contact GetById(string Id);
+        bool Insert(Contact contact);
+        bool Update(Contact contact);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CONQUEST.Schedule.Api.Domain.Models
+namespace CONQUEST.Schedule.Api.Domain.Mongo
 {
     public class MongoConfiguration
     {

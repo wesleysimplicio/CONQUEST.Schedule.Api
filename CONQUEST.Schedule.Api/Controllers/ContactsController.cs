@@ -1,4 +1,5 @@
 ﻿using CONQUEST.Schedule.Api.Domain.Interfaces;
+using CONQUEST.Schedule.Api.Domain.Models;
 using CONQUEST.Schedule.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace CONQUEST.Schedule.Api.Controllers
 
         public ContactsController(
              IContactBusiness contactBusiness,
-             ILogger logger
+             ILogger<ContactsController> logger
             )
         {
             this._contactBusiness = contactBusiness;
@@ -57,20 +58,71 @@ namespace CONQUEST.Schedule.Api.Controllers
 
         // POST: api/Contacts
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]Contact contact)
         {
+            try
+            {
+                var resul = this._contactBusiness.Insert(contact);
+                if (resul)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    _logger.LogDebug("Não foi possível inserir");
+                    return new BadRequestResult();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string error = $"Não foi possível inserir";
+                this._logger.LogError(ex, error);
+                return BadRequest(new ErrorItem(2, error));
+            }
         }
 
         // PUT: api/Contacts/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]Contact contact)
         {
+            try
+            {
+                var resul = this._contactBusiness.Update(contact);
+                if (resul)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    _logger.LogDebug("Não foi possível inserir");
+                    return new BadRequestResult();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string error = $"Não foi possível inserir";
+                this._logger.LogError(ex, error);
+                return BadRequest(new ErrorItem(2, error));
+            }
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+
+            try
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                string error = $"Não foi possível inserir";
+                this._logger.LogError(ex, error);
+                return BadRequest(new ErrorItem(2, error));
+            }
         }
     }
 }

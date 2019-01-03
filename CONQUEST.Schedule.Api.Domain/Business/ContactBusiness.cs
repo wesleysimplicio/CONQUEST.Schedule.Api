@@ -25,6 +25,17 @@ namespace CONQUEST.Schedule.Api.Domain.Business
             return this._contactRepository.GetById(Id);
         }
 
+        public bool Insert(Contact contact)
+        {
+            this._contactRepository.Insert(contact);
+            return true;
+        }
+
+        public bool Update(Contact contact)
+        {
+            return this._contactRepository.Update(contact) > 0;
+        }
+
         public void Dispose()
         {
         }
